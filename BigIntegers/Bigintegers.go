@@ -257,7 +257,7 @@ func LongAdd(a, b []uint64) []uint64 {
 	for i := 0; i < len(a); i++ {
 		temp := a[i] + b[i] + carry
 		C[i] = temp & 0xffffffffffffffff
-		carry = isCarryExist(a[i], b[i])
+		carry = isCarryExist(a[i], b[i], C[i])
 
 	}
 
@@ -449,24 +449,20 @@ func KillDigits(a []uint64, k int) []uint64 {
 	a = ReadBin(bit)
 	return a
 }
-func isCarryExist(a, b uint64) uint64 {
+func isCarryExist(a, b, c uint64) uint64 {
 	A := ToBinDigit(a)
 	B := ToBinDigit(b)
-
+	C := ToBinDigit(c)
 	if string(A[0]) == "1" && string(B[0]) == "1" {
 		return 1
 	} else if string(A[0]) == "0" && string(B[0]) == "0" {
 		return 0
+	} else if string(C[0]) == "0" {
+		return 1
 	} else {
-		for i := 1; i < len(A); i++ {
-			if string(A[i]) == "1" && string(B[i]) == "1" {
-				return 1
-			} else if string(A[i]) == "0" && string(B[i]) == "0" {
-				return 0
-			}
-		}
 		return 0
 	}
+
 }
 func SameSize(a, b []uint64) ([]uint64, []uint64) {
 	leng := 0
@@ -475,27 +471,25 @@ func SameSize(a, b []uint64) ([]uint64, []uint64) {
 	}
 	if len(a) > len(b) {
 		leng = len(a)
+		for i := len(b); i < leng; i++ {
+			b = append(b, 0)
+		}
 	} else if len(a) < len(b) {
 		leng = len(b)
+		for i := len(a); i < leng; i++ {
+			a = append(a, 0)
+		}
 	}
-	A := make([]uint64, leng)
-	B := make([]uint64, leng)
-	for i := 0; i < len(a); i++ {
-		A[i] = a[i]
-	}
-	for i := 0; i < len(b); i++ {
-		B[i] = b[i]
-	}
-	return A, B
+
+	return a, b
 }
 func BitLength(a []uint64) int {
 	bit := DelLeadZero(ToBin(a))
 	return len(bit)
 }
 func IsEvenNumber(a []uint64) bool {
-	A := ToBinDigit(a[0])
 	b := true
-	if string(A[len(A)-1]) == "0" {
+	if (a[0] & uint64(1)) == 0 {
 		return b
 	} else {
 		return !b
