@@ -7,94 +7,95 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	bigintegers "example.com/BigIntegerGo/BigIntegers"
 )
 
 func main() {
 
-	// {
-	// 	a := bigintegers.ReadHex("40D4ED6B22B4A26625AFFF98B70342C0742C4EE21087230415DF1B9348B28C94")
-	// 	b := bigintegers.ReadHex("1A98996C6EFBC1BC3C230BE9272861A04689D8D76C4F361DCD35972D469197B4")
-	// 	if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongAdd(a, b))) != "5B6D86D791B0642261D30B81DE2BA460BAB627B97CD65921E314B2C08F442448" {
-	// 		fmt.Println("Error")
-	// 		log.Fatal(true)
-	// 	}
-	// 	start := time.Now()
-	// 	for i := 0; i < 1000; i++ {
-	// 		bigintegers.LongAdd(a, b)
-	// 	}
-	// 	duration := time.Since(start)
-	// 	fmt.Println("Average Add:", duration/1000)
-	// }
-	// {
-	// 	a := bigintegers.ReadHex("3AF01A7357B25888DD937053E63DF5BC8562ED86D24295AC8C491BF41E428869")
-	// 	b := bigintegers.ReadHex("FC31AC9F4BB19608207B449B6F318CE53ECEEEA214C2981971036F45F587932")
-	// 	if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongSub(a, b))) != "2B2CFFA962F73F285B8BBC0A2F4ADCEE3175FE9CB0F66C2AF538E4FFBEEA0F37" {
-	// 		fmt.Println("Error")
-	// 		log.Fatal(true)
-	// 	}
-	// 	start := time.Now()
-	// 	for i := 0; i < 1000; i++ {
-	// 		bigintegers.LongSub(a, b)
-	// 	}
-	// 	duration := time.Since(start)
-	// 	fmt.Println("Average Sub:", duration.Nanoseconds()/1000)
-	// }
-	// {
-	// 	a := bigintegers.ReadHex("1FA5C57629704BEC9142567B9ECFD3FADF4029E8171C39AB6A7F4BB5551D7AC1")
-	// 	b := bigintegers.ReadHex("75F4A39FEAE14D872A5E8374B27CB3FADE464D35AAE3D9B285478AE0563EEE6A")
-	// 	if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongMul(a, b))) != "E95017987491347D9BC2B9020D688F1E2EB93636C68200070F3C80FCD14BED1C22D14814FF44D6B28D7EFC15BD8BA1D9DF399AC8DFCA9F16018E577371241EA" {
-	// 		fmt.Println("Error")
-	// 		log.Fatal(true)
-	// 	}
-	// 	start := time.Now()
-	// 	for i := 0; i < 1000; i++ {
-	// 		bigintegers.LongMul(a, b)
-	// 	}
-	// 	duration := time.Since(start)
-	// 	fmt.Println("Average Mul:", duration.Nanoseconds()/1000)
-	// }
-	// {
-	// 	a := bigintegers.ReadHex("6FC747E8A92E7ADD219DA48AF56A378B7D484FF9E2CEC81C24970D982CD381EE3CEC65072296645350319B24752497AF4B06B81284F25927C3DC71EED5345CE7")
-	// 	b := bigintegers.ReadHex("181F440F6C8BF3FBBA82755EDA369685FEF7226AD6BDC38D3646E61D86084768")
-	// 	q, r := bigintegers.LongDivMod(a, b)
-	// 	if bigintegers.DelLeadZero(bigintegers.ToHex(q)) != "4A24442CA54CD28B3B33B52431401635A6EAE51068339E9FDD89354916534C498" {
-	// 		fmt.Println("Error")
-	// 		log.Fatal(true)
-	// 	}
-	// 	if bigintegers.DelLeadZero(bigintegers.ToHex(r)) != "51265554E04C5E6E7C300D3FB117FBAB8D6F6E0206BED147ADE2606607E5727" {
-	// 		fmt.Println("Error")
-	// 		log.Fatal(true)
-	// 	}
-	// 	start := time.Now()
-	// 	for i := 0; i < 1000; i++ {
-	// 		bigintegers.LongDivMod(a, b)
-	// 	}
-	// 	duration := time.Since(start)
-	// 	fmt.Println("Average DivMod:", duration.Nanoseconds()/1000)
-	// }
-	// {
-	// 	a := bigintegers.ReadHex("FC31AC9F4BB19608207B449B6F318CE53ECEEEA214C2981971036F45F587932")
-	// 	b := bigintegers.ReadDec("100")
-	// 	n := bigintegers.ReadHex("3AF01A7357B25888DD937053E63DF5BC8562ED86D24295AC8C491BF41E428869")
-	// 	if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongModPowerBarrett(a, b, n))) != strings.ToUpper("B5526DFA1D89386721A537C8B2BA93052733FB23424BB8CBB78B19EB7D15071") {
-	// 		fmt.Println("Error")
-	// 		log.Fatal(true)
-	// 	}
-	// 	start := time.Now()
-	// 	for i := 0; i < 1000; i++ {
-	// 		bigintegers.LongModPowerBarrett(a, b, n)
-	// 	}
-	// 	duration := time.Since(start)
-	// 	fmt.Println("Average Pow:", duration.Nanoseconds()/1000)
-	// }
+	{
+		a := bigintegers.ReadHex("40D4ED6B22B4A26625AFFF98B70342C0742C4EE21087230415DF1B9348B28C94")
+		b := bigintegers.ReadHex("1A98996C6EFBC1BC3C230BE9272861A04689D8D76C4F361DCD35972D469197B4")
+		if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongAdd(a, b))) != "5B6D86D791B0642261D30B81DE2BA460BAB627B97CD65921E314B2C08F442448" {
+			fmt.Println("Error")
+			log.Fatal(true)
+		}
+		start := time.Now()
+		for i := 0; i < 1000; i++ {
+			bigintegers.LongAdd(a, b)
+		}
+		duration := time.Since(start)
+		fmt.Println("Average Add:", duration/1000)
+	}
+	{
+		a := bigintegers.ReadHex("3AF01A7357B25888DD937053E63DF5BC8562ED86D24295AC8C491BF41E428869")
+		b := bigintegers.ReadHex("FC31AC9F4BB19608207B449B6F318CE53ECEEEA214C2981971036F45F587932")
+		if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongSub(a, b))) != "2B2CFFA962F73F285B8BBC0A2F4ADCEE3175FE9CB0F66C2AF538E4FFBEEA0F37" {
+			fmt.Println("Error")
+			log.Fatal(true)
+		}
+		start := time.Now()
+		for i := 0; i < 1000; i++ {
+			bigintegers.LongSub(a, b)
+		}
+		duration := time.Since(start)
+		fmt.Println("Average Sub:", duration.Nanoseconds()/1000)
+	}
+	{
+		a := bigintegers.ReadHex("1FA5C57629704BEC9142567B9ECFD3FADF4029E8171C39AB6A7F4BB5551D7AC1")
+		b := bigintegers.ReadHex("75F4A39FEAE14D872A5E8374B27CB3FADE464D35AAE3D9B285478AE0563EEE6A")
+		if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongMul(a, b))) != "E95017987491347D9BC2B9020D688F1E2EB93636C68200070F3C80FCD14BED1C22D14814FF44D6B28D7EFC15BD8BA1D9DF399AC8DFCA9F16018E577371241EA" {
+			fmt.Println("Error")
+			log.Fatal(true)
+		}
+		start := time.Now()
+		for i := 0; i < 1000; i++ {
+			bigintegers.LongMul(a, b)
+		}
+		duration := time.Since(start)
+		fmt.Println("Average Mul:", duration.Nanoseconds()/1000)
+	}
+	{
+		a := bigintegers.ReadHex("6FC747E8A92E7ADD219DA48AF56A378B7D484FF9E2CEC81C24970D982CD381EE3CEC65072296645350319B24752497AF4B06B81284F25927C3DC71EED5345CE7")
+		b := bigintegers.ReadHex("181F440F6C8BF3FBBA82755EDA369685FEF7226AD6BDC38D3646E61D86084768")
+		q, r := bigintegers.LongDivMod(a, b)
+		if bigintegers.DelLeadZero(bigintegers.ToHex(q)) != "4A24442CA54CD28B3B33B52431401635A6EAE51068339E9FDD89354916534C498" {
+			fmt.Println("Error")
+			log.Fatal(true)
+		}
+		if bigintegers.DelLeadZero(bigintegers.ToHex(r)) != "51265554E04C5E6E7C300D3FB117FBAB8D6F6E0206BED147ADE2606607E5727" {
+			fmt.Println("Error")
+			log.Fatal(true)
+		}
+		start := time.Now()
+		for i := 0; i < 1000; i++ {
+			bigintegers.LongDivMod(a, b)
+		}
+		duration := time.Since(start)
+		fmt.Println("Average DivMod:", duration.Nanoseconds()/1000)
+	}
+	{
+		a := bigintegers.ReadHex("FC31AC9F4BB19608207B449B6F318CE53ECEEEA214C2981971036F45F587932")
+		b := bigintegers.ReadDec("100")
+		n := bigintegers.ReadHex("3AF01A7357B25888DD937053E63DF5BC8562ED86D24295AC8C491BF41E428869")
+		if bigintegers.DelLeadZero(bigintegers.ToHex(bigintegers.LongModPowerBarrett(a, b, n))) != strings.ToUpper("B5526DFA1D89386721A537C8B2BA93052733FB23424BB8CBB78B19EB7D15071") {
+			fmt.Println("Error")
+			log.Fatal(true)
+		}
+		start := time.Now()
+		for i := 0; i < 1000; i++ {
+			bigintegers.LongModPowerBarrett(a, b, n)
+		}
+		duration := time.Since(start)
+		fmt.Println("Average Pow:", duration.Nanoseconds()/1000)
+	}
 
-	// TestAdd()
-	// TestSub()
-	// TestMul()
-	// TestCmp()
-	// TestDiv()
+	TestAdd()
+	TestSub()
+	TestMul()
+	TestCmp()
+	TestDiv()
 
 }
 func LongShiftRight(a []uint64, shiftVal int) []uint64 {
