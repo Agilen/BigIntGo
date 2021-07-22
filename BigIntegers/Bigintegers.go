@@ -349,6 +349,39 @@ func LongShiftLeft(a []uint64, shiftVal int) []uint64 {
 
 	return DelNull(ToUInt64(A))
 }
+func LongShiftRight(a []uint64, shiftVal int) []uint64 {
+	a = DelNull(a)
+	A := ToUInt32(a)
+	shiftAmount := 32
+	invShift := 0
+	buflen := len(A)
+
+	for buflen > 1 && A[buflen-1] == 0 {
+		buflen = buflen - 1
+	}
+
+	for count := shiftVal; count > 0; {
+
+		if count < shiftAmount {
+			shiftAmount = count
+			invShift = 32 - shiftAmount
+		}
+		carry := uint64(0)
+
+		for i := buflen - 1; i >= 0; i-- {
+			val := uint64(A[i]) >> uint64(shiftAmount)
+			val |= carry
+
+			carry = uint64(A[i]) << uint64(invShift) & 0xffffffff
+			A[i] = uint32(val)
+		}
+
+		count -= shiftAmount
+	}
+
+	fmt.Println(A)
+	return DelNull(ToUInt64(A))
+}
 func LongDivMod(a, b []uint64) ([]uint64, []uint64) {
 	k := BitLength(b)
 	r := a

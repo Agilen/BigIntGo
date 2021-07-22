@@ -13,12 +13,6 @@ import (
 
 func main() {
 
-	q := make([]uint64, 6)
-	q[0] = uint64(16)
-	q[1] = uint64(324324)
-	m := shiftLeft([]uint64{1}, 100)
-	fmt.Println(bigintegers.ToHex(q))
-	fmt.Println(bigintegers.ToHex(m), cap(m))
 	// {
 	// 	a := bigintegers.ReadHex("40D4ED6B22B4A26625AFFF98B70342C0742C4EE21087230415DF1B9348B28C94")
 	// 	b := bigintegers.ReadHex("1A98996C6EFBC1BC3C230BE9272861A04689D8D76C4F361DCD35972D469197B4")
@@ -96,20 +90,18 @@ func main() {
 	// 	fmt.Println("Average Pow:", duration.Nanoseconds()/1000)
 	// }
 
-	TestAdd()
-	TestSub()
-	TestMul()
-	TestCmp()
-	TestDiv()
+	// TestAdd()
+	// TestSub()
+	// TestMul()
+	// TestCmp()
+	// TestDiv()
 
 }
-func shiftLeft(a []uint64, shiftVal int) []uint64 {
+func LongShiftRight(a []uint64, shiftVal int) []uint64 {
 	a = bigintegers.DelNull(a)
-	for i := shiftVal; i > 0; i -= 64 {
-		a = append(a, 0)
-	}
 	A := bigintegers.ToUInt32(a)
 	shiftAmount := 32
+	invShift := 0
 	buflen := len(A)
 
 	for buflen > 1 && A[buflen-1] == 0 {
@@ -120,24 +112,21 @@ func shiftLeft(a []uint64, shiftVal int) []uint64 {
 
 		if count < shiftAmount {
 			shiftAmount = count
+			invShift = 32 - shiftAmount
 		}
 		carry := uint64(0)
-		for i := 0; i < buflen; i++ {
-			val := uint64(A[i]) << uint64(shiftAmount)
+
+		for i := buflen - 1; i >= 0; i-- {
+			val := uint64(A[i]) >> uint64(shiftAmount)
 			val |= carry
 
-			A[i] = uint32(val & 0xffffffff)
-			carry = val >> 32
+			carry = uint64(A[i]) << uint64(invShift) & 0xffffffff
+			A[i] = uint32(val)
 		}
 
-		if carry != 0 {
-			if buflen+1 <= len(A) {
-				A[buflen] = uint32(carry)
-				buflen++
-			}
-		}
 		count -= shiftAmount
 	}
+
 	fmt.Println(A)
 	return bigintegers.DelNull(bigintegers.ToUInt64(A))
 }
