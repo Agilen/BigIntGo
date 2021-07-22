@@ -305,21 +305,49 @@ func LongMul(a, b []uint64) []uint64 {
 	}
 	return DelNull(c)
 }
-func LongShiftLeft(a []uint64, n int) []uint64 {
-
-	if n <= -1 {
+func LongShiftLeft(a []uint64, shiftVal int) []uint64 {
+	if shiftVal <= -1 {
 		return []uint64{1}
 	}
-	if n == 0 {
-		return a
+	if shiftVal == 0 {
+		return DelNull(a)
 	}
-	bin := ToBin(a)
+	a = DelNull(a)
+	for i := shiftVal; i > 0; i -= 64 {
+		a = append(a, 0)
+	}
+	A := ToUInt32(a)
+	shiftAmount := 32
+	buflen := len(A)
 
-	for i := 0; i < n; i++ {
-		bin += "0"
+	for buflen > 1 && A[buflen-1] == 0 {
+		buflen = buflen - 1
 	}
 
-	return ReadBin(bin)
+	for count := shiftVal; count > 0; {
+
+		if count < shiftAmount {
+			shiftAmount = count
+		}
+		carry := uint64(0)
+		for i := 0; i < buflen; i++ {
+			val := uint64(A[i]) << uint64(shiftAmount)
+			val |= carry
+
+			A[i] = uint32(val & 0xffffffff)
+			carry = val >> 32
+		}
+
+		if carry != 0 {
+			if buflen+1 <= len(A) {
+				A[buflen] = uint32(carry)
+				buflen++
+			}
+		}
+		count -= shiftAmount
+	}
+
+	return DelNull(ToUInt64(A))
 }
 func LongDivMod(a, b []uint64) ([]uint64, []uint64) {
 	k := BitLength(b)
@@ -450,19 +478,16 @@ func KillDigits(a []uint64, k int) []uint64 {
 	return a
 }
 func isCarryExist(a, b, c uint64) uint64 {
-	A := ToBinDigit(a)
-	B := ToBinDigit(b)
-	C := ToBinDigit(c)
-	if string(A[0]) == "1" && string(B[0]) == "1" {
+
+	if a>>63 == 1 && b>>63 == 1 {
 		return 1
-	} else if string(A[0]) == "0" && string(B[0]) == "0" {
+	} else if a>>63 == 0 && b>>63 == 0 {
 		return 0
-	} else if string(C[0]) == "0" {
+	} else if c>>63 == 0 {
 		return 1
 	} else {
 		return 0
 	}
-
 }
 func SameSize(a, b []uint64) ([]uint64, []uint64) {
 	leng := 0
