@@ -26,7 +26,7 @@ func main() {
 			bigintegers.LongAdd(a, b)
 		}
 		duration := time.Since(start)
-		fmt.Println("Average Add:", duration/1000)
+		fmt.Println("Average Add:", duration.Nanoseconds()/1000)
 	}
 	{
 		a := bigintegers.ReadHex("3AF01A7357B25888DD937053E63DF5BC8562ED86D24295AC8C491BF41E428869")

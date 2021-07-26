@@ -379,7 +379,6 @@ func LongShiftRight(a []uint64, shiftVal int) []uint64 {
 		count -= shiftAmount
 	}
 
-	fmt.Println(A)
 	return DelNull(ToUInt64(A))
 }
 func LongDivMod(a, b []uint64) ([]uint64, []uint64) {
@@ -505,10 +504,7 @@ func KillDigits(a []uint64, k int) []uint64 {
 		return a
 	}
 
-	bit := ToBin(a)
-	bit = bit[0 : len(bit)-k]
-	a = ReadBin(bit)
-	return a
+	return LongShiftRight(a, k)
 }
 func isCarryExist(a, b, c uint64) uint64 {
 
@@ -540,6 +536,15 @@ func SameSize(a, b []uint64) ([]uint64, []uint64) {
 	}
 
 	return a, b
+}
+func BitLengtha(a []uint64) int {
+	a = DelNull(a)
+	for j := 63; j > 0; j-- {
+		if a[len(a)-1]>>j&1 == 1 {
+			return (j + 1) + 64*(len(a)-1)
+		}
+	}
+	return 0
 }
 func BitLength(a []uint64) int {
 	bit := DelLeadZero(ToBin(a))
